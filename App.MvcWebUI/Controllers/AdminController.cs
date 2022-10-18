@@ -1,6 +1,11 @@
 ﻿using App.Business.Abstract;
 using App.Entities.Concrete;
+using App.MvcWebUI.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 
 namespace App.MvcWebUI.Controllers
 {
@@ -14,12 +19,13 @@ namespace App.MvcWebUI.Controllers
             _productService = productService;
             _categoryService = categoryService;
         }
-
+        [Authorize(Roles = "Admin,Editor")]
         public IActionResult Index()
         {
             var model = new ProductListViewModel
             {
-                Products = _productService.GetAll()
+                Products = _productService.GetAll(),
+                IsAdmin = HttpContext.User.FindFirst(ClaimTypes.Role).Value == "Admin"
             };
             return View(model);
         }

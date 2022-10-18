@@ -7,8 +7,12 @@
     <h2>Product List</h2>
     <div class="d-flex justify-content-between pb-3">
         <a class="btn btn-xs btn-success" asp-action="Add" asp-controller="Admin">Add a new Product</a>
-
-        <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new Editor</a>
+        @if(Model.IsAdmin) {
+            <div>
+                <a class="btn btn-xs btn-success" asp-action="RegisterEditor" asp-controller="Account">Register new User</a>
+                @*<a class="btn btn-xs btn-success" asp-action="CreateRole" asp-controller="Account">Create new Role</a>*@
+            </div>
+        }
     </div>
 
     <table class="table">

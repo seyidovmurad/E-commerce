@@ -11,5 +11,7 @@ namespace App.MvcWebUI
         public int CurrentPage { get; set; }
         public string Param { get; internal set; }
         public int Desc { get; internal set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

@@ -2,7 +2,10 @@ using App.Business.Abstract;
 using App.Business.Concrete;
 using App.DataAccess.Abstract;
 using App.DataAccess.Concrete.EfEntityFramework;
+using App.MvcWebUI.Entities;
 using App.MvcWebUI.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +17,17 @@ builder.Services.AddSingleton<ICartSessionService, CartSessionService>();
 builder.Services.AddSingleton<ICartService, CartService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
+builder.Services.AddDbContext<CustomIdentityDbContext>( options => options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Northwind;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>()
+    .AddEntityFrameworkStores<CustomIdentityDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 
 
 var app = builder.Build();
@@ -37,6 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
